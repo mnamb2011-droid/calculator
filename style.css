@@ -1,5 +1,5 @@
 :root {
-    --bg-color: #121212;
+    --bg-color: #000000;
     --screen-bg: #1e1e1e;
     --key-bg: #2d2d2d;
     --key-text: #ffffff;
@@ -7,58 +7,64 @@
     --accent-func: #4b4b4b;
     --accent-action: #2ecc71;
     --text-dim: #888;
-    --font-main: 'Roboto', 'Segoe UI', sans-serif;
+    --font-main: 'Roboto', sans-serif;
 }
 
-* { box-sizing: border-box; touch-action: manipulation; user-select: none; }
+* { box-sizing: border-box; touch-action: manipulation; user-select: none; -webkit-tap-highlight-color: transparent; }
 
-body {
+html, body {
     margin: 0;
     padding: 0;
     background: var(--bg-color);
     color: var(--key-text);
     font-family: var(--font-main);
-    height: 100vh;
-    overflow: hidden;
+    /* استخدام dvh يحل مشكلة شريط العنوان في متصفحات الموبايل */
+    height: 100dvh;
+    height: 100vh; /* احتياطي */
+    overflow: hidden; /* يمنع التمرير (Scrolling) نهائياً */
 }
 
-/* RTL Support for Arabic */
 body.rtl { direction: rtl; }
-body.rtl .expression-view input { text-align: left; direction: ltr; } /* Math is usually LTR even in Arabic */
+body.rtl .expression-view input { text-align: left; direction: ltr; }
 
 .app-container {
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 100%;
 }
 
-/* Toolbar */
+/* الشريط العلوي - حجم ثابت */
 .toolbar {
+    flex: 0 0 auto;
     display: flex;
     justify-content: space-between;
-    padding: 10px;
-    font-size: 0.8rem;
+    padding: 8px 15px;
+    font-size: 0.85rem;
     color: var(--text-dim);
+    background: #111;
 }
 
-/* Display */
+/* الشاشة - تأخذ 35% من المساحة المتبقية */
 .display-screen {
-    flex: 1;
+    flex: 3.5; 
     background: var(--screen-bg);
-    padding: 20px;
+    padding: 15px;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    border-bottom: 2px solid #333;
     position: relative;
+    border-bottom: 1px solid #333;
 }
 
 .history-view {
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: var(--text-dim);
     text-align: right;
     margin-bottom: 5px;
-    min-height: 1.2em;
+    opacity: 0.7;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .expression-view input {
@@ -66,86 +72,77 @@ body.rtl .expression-view input { text-align: left; direction: ltr; } /* Math is
     background: transparent;
     border: none;
     color: white;
-    font-size: 2rem;
+    font-size: 2.5rem; /* تكبير الخط */
     text-align: right;
-    font-family: 'Courier New', monospace;
+    font-family: monospace;
     outline: none;
 }
 
 .result-view {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     color: var(--accent-op);
     text-align: right;
     font-weight: bold;
     min-height: 1.5em;
 }
 
-/* Graphing Canvas */
-#graph-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 40%;
-    background: #000;
-    z-index: 10;
-}
-#graph-container.hidden { display: none; }
-#close-graph {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: red;
-    border: none;
-    color: white;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-}
-
-/* Keypad Layout */
+/* شريط الدوال الإضافية - حجم ثابت */
 .functions-panel {
+    flex: 0 0 auto;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     background: #222;
-    padding: 5px;
-    gap: 4px;
+    padding: 2px;
+    gap: 1px;
 }
 
 .functions-panel button {
     background: #333;
     color: #ccc;
     font-size: 0.9rem;
-    padding: 10px 0;
+    padding: 12px 0;
     border: none;
-    border-radius: 4px;
 }
 
+/* لوحة الأرقام - تأخذ المساحة المتبقية بالكامل (حوالي 60%) */
 .keypad {
+    flex: 6; 
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    /* تقسيم الارتفاع بالتساوي تماماً على 5 صفوف */
+    grid-template-rows: repeat(5, 1fr); 
     gap: 1px;
     background: #000;
-    padding-bottom: env(safe-area-inset-bottom);
 }
 
 .key {
     background: var(--key-bg);
     border: none;
     color: var(--key-text);
-    font-size: 1.5rem;
-    padding: 20px 0;
+    font-size: 1.6rem;
+    /* إزالة الـ padding الثابت واستخدام التوسيط المرن */
+    padding: 0; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    transition: background 0.1s;
 }
 
-.key:active { background: #444; }
-.key.op { background: #3a3a3a; color: var(--accent-op); font-size: 1.8rem; }
-.key.func { background: var(--accent-func); font-size: 1.1rem; }
-.key.action { background: var(--accent-action); color: #000; }
+.key:active { background: #555; }
+.key.op { background: #1a1a1a; color: var(--accent-op); font-size: 1.8rem; }
+.key.func { background: var(--accent-func); font-size: 1.2rem; }
+.key.action { background: var(--accent-action); color: #000; font-weight: bold; }
 
-/* Responsive Adjustments */
-@media (min-width: 768px) {
-    .keypad { grid-template-columns: repeat(5, 1fr); }
-    /* In tablet mode, we would move operations to the side */
+/* الرسم البياني */
+#graph-container {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: #000; z-index: 100;
+}
+#graph-container.hidden { display: none; }
+#close-graph {
+    position: absolute; top: 15px; right: 15px;
+    background: rgba(255, 0, 0, 0.7);
+    color: white; border: none; font-size: 1.5rem;
+    width: 40px; height: 40px; border-radius: 50%;
 }
