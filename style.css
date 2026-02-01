@@ -1,0 +1,151 @@
+:root {
+    --bg-color: #121212;
+    --screen-bg: #1e1e1e;
+    --key-bg: #2d2d2d;
+    --key-text: #ffffff;
+    --accent-op: #fa8231;
+    --accent-func: #4b4b4b;
+    --accent-action: #2ecc71;
+    --text-dim: #888;
+    --font-main: 'Roboto', 'Segoe UI', sans-serif;
+}
+
+* { box-sizing: border-box; touch-action: manipulation; user-select: none; }
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg-color);
+    color: var(--key-text);
+    font-family: var(--font-main);
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* RTL Support for Arabic */
+body.rtl { direction: rtl; }
+body.rtl .expression-view input { text-align: left; direction: ltr; } /* Math is usually LTR even in Arabic */
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Toolbar */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+}
+
+/* Display */
+.display-screen {
+    flex: 1;
+    background: var(--screen-bg);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border-bottom: 2px solid #333;
+    position: relative;
+}
+
+.history-view {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    text-align: right;
+    margin-bottom: 5px;
+    min-height: 1.2em;
+}
+
+.expression-view input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    text-align: right;
+    font-family: 'Courier New', monospace;
+    outline: none;
+}
+
+.result-view {
+    font-size: 1.5rem;
+    color: var(--accent-op);
+    text-align: right;
+    font-weight: bold;
+    min-height: 1.5em;
+}
+
+/* Graphing Canvas */
+#graph-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background: #000;
+    z-index: 10;
+}
+#graph-container.hidden { display: none; }
+#close-graph {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: red;
+    border: none;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+/* Keypad Layout */
+.functions-panel {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    background: #222;
+    padding: 5px;
+    gap: 4px;
+}
+
+.functions-panel button {
+    background: #333;
+    color: #ccc;
+    font-size: 0.9rem;
+    padding: 10px 0;
+    border: none;
+    border-radius: 4px;
+}
+
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: #000;
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.key {
+    background: var(--key-bg);
+    border: none;
+    color: var(--key-text);
+    font-size: 1.5rem;
+    padding: 20px 0;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.key:active { background: #444; }
+.key.op { background: #3a3a3a; color: var(--accent-op); font-size: 1.8rem; }
+.key.func { background: var(--accent-func); font-size: 1.1rem; }
+.key.action { background: var(--accent-action); color: #000; }
+
+/* Responsive Adjustments */
+@media (min-width: 768px) {
+    .keypad { grid-template-columns: repeat(5, 1fr); }
+    /* In tablet mode, we would move operations to the side */
+}

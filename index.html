@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HyperCalc Offline</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    </head>
+<body>
+
+    <div class="app-container">
+        <header class="toolbar">
+            <button id="menu-btn">☰</button>
+            <span id="mode-indicator">DEG</span>
+            <span id="notation-indicator">SCI</span>
+            <button id="lang-btn">EN/ع</button>
+        </header>
+
+        <div id="graph-container" class="hidden">
+            <canvas id="graph-canvas"></canvas>
+            <button id="close-graph">×</button>
+        </div>
+
+        <div class="display-screen">
+            <div class="history-view" id="history"></div>
+            <div class="expression-view">
+                <input type="text" id="input-field" readonly placeholder="0">
+            </div>
+            <div class="result-view" id="result-field"></div>
+        </div>
+
+        <div class="functions-panel">
+            <button data-fn="sin">sin</button>
+            <button data-fn="cos">cos</button>
+            <button data-fn="tan">tan</button>
+            <button data-fn="log">log</button>
+            <button data-fn="ln">ln</button>
+            <button data-fn="sqrt">√</button>
+            <button data-fn="pow">^</button>
+            <button data-fn="(">(</button>
+            <button data-fn=")">)</button>
+            <button data-action="graph" class="special-action">📈</button>
+        </div>
+
+        <div class="keypad">
+            <button class="key func" data-key="CLEAR">AC</button>
+            <button class="key func" data-key="DEL">⌫</button>
+            <button class="key func" data-key="%">%</button>
+            <button class="key op" data-key="/">÷</button>
+
+            <button class="key num" data-key="7">7</button>
+            <button class="key num" data-key="8">8</button>
+            <button class="key num" data-key="9">9</button>
+            <button class="key op" data-key="*">×</button>
+
+            <button class="key num" data-key="4">4</button>
+            <button class="key num" data-key="5">5</button>
+            <button class="key num" data-key="6">6</button>
+            <button class="key op" data-key="-">−</button>
+
+            <button class="key num" data-key="1">1</button>
+            <button class="key num" data-key="2">2</button>
+            <button class="key num" data-key="3">3</button>
+            <button class="key op" data-key="+">+</button>
+
+            <button class="key num" data-key="0">0</button>
+            <button class="key num" data-key=".">.</button>
+            <button class="key num" data-key="EXP">E</button>
+            <button class="key action" data-key="=">=</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
