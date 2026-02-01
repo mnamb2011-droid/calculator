@@ -10,18 +10,22 @@
     --font-main: 'Roboto', sans-serif;
 }
 
-* { box-sizing: border-box; touch-action: manipulation; user-select: none; -webkit-tap-highlight-color: transparent; }
+* { box-sizing: border-box; touch-action: manipulation; user-select: none; -webkit-tap-highlight-color: transparent; outline: none; }
 
+/* هذا التعديل يجبر التطبيق على البقاء داخل حدود الشاشة المرئية فقط */
 html, body {
     margin: 0;
     padding: 0;
     background: var(--bg-color);
     color: var(--key-text);
     font-family: var(--font-main);
-    /* استخدام dvh يحل مشكلة شريط العنوان في متصفحات الموبايل */
-    height: 100dvh;
-    height: 100vh; /* احتياطي */
-    overflow: hidden; /* يمنع التمرير (Scrolling) نهائياً */
+    position: fixed; /* تثبيت الشاشة لمنع التمرير */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%; /* استخدام النسبة المئوية مع التثبيت أضمن من vh */
+    overflow: hidden;
 }
 
 body.rtl { direction: rtl; }
@@ -34,37 +38,44 @@ body.rtl .expression-view input { text-align: left; direction: ltr; }
     width: 100%;
 }
 
-/* الشريط العلوي - حجم ثابت */
+/* الشريط العلوي */
 .toolbar {
-    flex: 0 0 auto;
+    flex: 0 0 50px; /* ارتفاع ثابت */
     display: flex;
     justify-content: space-between;
-    padding: 8px 15px;
-    font-size: 0.85rem;
+    align-items: center;
+    padding: 0 15px;
+    font-size: 0.9rem;
     color: var(--text-dim);
     background: #111;
-}
-
-/* الشاشة - تأخذ 35% من المساحة المتبقية */
-.display-screen {
-    flex: 3.5; 
-    background: var(--screen-bg);
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    position: relative;
     border-bottom: 1px solid #333;
 }
 
+/* الأزرار العلوية قابلة للضغط الآن */
+.toolbar span, .toolbar button {
+    cursor: pointer;
+    padding: 5px 10px;
+}
+.toolbar button { background: none; border: 1px solid #333; color: white; border-radius: 4px; }
+
+/* الشاشة */
+.display-screen {
+    flex: 1; /* تأخذ مساحة مرنة صغيرة */
+    background: var(--screen-bg);
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 0; /* مهم جداً لمنع التمدد */
+}
+
 .history-view {
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: var(--text-dim);
     text-align: right;
     margin-bottom: 5px;
-    opacity: 0.7;
+    height: 20px;
     overflow: hidden;
-    white-space: nowrap;
 }
 
 .expression-view input {
@@ -72,77 +83,59 @@ body.rtl .expression-view input { text-align: left; direction: ltr; }
     background: transparent;
     border: none;
     color: white;
-    font-size: 2.5rem; /* تكبير الخط */
+    font-size: 2.2rem;
     text-align: right;
     font-family: monospace;
-    outline: none;
 }
 
 .result-view {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     color: var(--accent-op);
     text-align: right;
     font-weight: bold;
-    min-height: 1.5em;
+    height: 35px;
 }
 
-/* شريط الدوال الإضافية - حجم ثابت */
+/* شريط الدوال */
 .functions-panel {
-    flex: 0 0 auto;
+    flex: 0 0 45px; /* ارتفاع ثابت */
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     background: #222;
-    padding: 2px;
     gap: 1px;
 }
-
 .functions-panel button {
-    background: #333;
-    color: #ccc;
-    font-size: 0.9rem;
-    padding: 12px 0;
-    border: none;
+    background: #333; color: #ccc; border: none; font-size: 0.9rem;
 }
 
-/* لوحة الأرقام - تأخذ المساحة المتبقية بالكامل (حوالي 60%) */
+/* لوحة الأرقام */
 .keypad {
-    flex: 6; 
+    flex: 2; /* تأخذ ضعف مساحة الشاشة */
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    /* تقسيم الارتفاع بالتساوي تماماً على 5 صفوف */
-    grid-template-rows: repeat(5, 1fr); 
+    grid-template-rows: repeat(5, 1fr); /* توزيع الصفوف بالتساوي */
     gap: 1px;
     background: #000;
+    min-height: 0; /* يمنع الخروج عن الشاشة */
 }
 
 .key {
     background: var(--key-bg);
     border: none;
     color: var(--key-text);
-    font-size: 1.6rem;
-    /* إزالة الـ padding الثابت واستخدام التوسيط المرن */
-    padding: 0; 
+    font-size: 1.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
 }
 
 .key:active { background: #555; }
-.key.op { background: #1a1a1a; color: var(--accent-op); font-size: 1.8rem; }
+.key.op { background: #1a1a1a; color: var(--accent-op); }
 .key.func { background: var(--accent-func); font-size: 1.2rem; }
-.key.action { background: var(--accent-action); color: #000; font-weight: bold; }
+.key.action { background: var(--accent-action); color: #000; }
 
-/* الرسم البياني */
+/* إصلاح الرسم البياني */
 #graph-container {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
+    position: absolute; top: 50px; left: 0; right: 0; bottom: 0;
     background: #000; z-index: 100;
-}
-#graph-container.hidden { display: none; }
-#close-graph {
-    position: absolute; top: 15px; right: 15px;
-    background: rgba(255, 0, 0, 0.7);
-    color: white; border: none; font-size: 1.5rem;
-    width: 40px; height: 40px; border-radius: 50%;
 }
